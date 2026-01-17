@@ -1,7 +1,7 @@
-import Header from "./components/header"
-import Footer from "./components/footer"
+import Header from "./components/header.jsx"
+import Footer from "./components/footer.jsx"
 import { Route, Routes } from "react-router"
-import HomePage from "./pages/HomePage"
+import HomePage from "./pages/HomePage.jsx"
 import "./App.css";
 import "./styles/homepage.css";
 
