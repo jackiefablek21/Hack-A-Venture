@@ -2,7 +2,7 @@ import { NavLink } from "react-router";
 
 const Header = () => {
   return (
-    <div className="header-wrapper">
+    <header className="header-wrapper">
       <div className="header-left">
         <NavLink
           to="/"
@@ -16,8 +16,8 @@ const Header = () => {
       </div>
 
       <div className="header-right">
-        <NavLink to="/skibidi" className="nav-link">
-          Skibidi
+        <NavLink to="/login" className="nav-link">
+          Login
         </NavLink>
 
         <NavLink to="/about" className="nav-link">
@@ -28,7 +28,7 @@ const Header = () => {
           Contact
         </NavLink>
       </div>
-    </div>
+    </header>
   );
 };
 
