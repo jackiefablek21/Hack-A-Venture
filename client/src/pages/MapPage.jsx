@@ -11,16 +11,21 @@ const center = {
 };
 
 export default function MapPage() {
-    console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
+    const keys = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+    console.log(keys)
   return (
-    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={12}
-      >
-        <Marker position={center} />
-      </GoogleMap>
-    </LoadScript>
+    <>
+    <main>
+        <LoadScript googleMapsApiKey={keys}>
+        <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={12}
+        >
+            <Marker position={center} />
+        </GoogleMap>
+        </LoadScript>
+    </main>
+    </>
   );
 }

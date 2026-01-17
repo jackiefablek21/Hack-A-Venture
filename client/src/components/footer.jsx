@@ -2,7 +2,7 @@ import { Link } from "react-router"
 
 const Footer = () => {
     return(
-        <div className="footer-wrapper">
+        <footer className="footer-wrapper">
             <div className="footer-left">
                 <div className="footer-contact-info">
                     <span>Main gate- Cổng chính, 702 Đ. Nguyễn Văn Link, Tân Hưng, Quận 7, Hồ Chí Minh 700000</span>
@@ -25,7 +25,7 @@ const Footer = () => {
                     <Link to="/" className="footer-section-links">About us</Link>
                 </div>
             </div>
-        </div>
+        </footer>
     )
 }
 

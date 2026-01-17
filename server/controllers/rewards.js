@@ -1,6 +1,7 @@
-const express = require('express');
+import {ethers} from "ethers";
+import express from "express";
+
 const router = express.Router();
-const { ethers } = require('ethers');
 
 // 1. Setup Provider & Treasury Wallet
 // Use your .env file for these sensitive values!
@@ -55,4 +56,4 @@ router.post('/reward', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

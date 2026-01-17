@@ -1,3 +1,4 @@
+
 html {
     /*scroll-snap-type: y mandatory;*/
     scroll-behavior: smooth;
@@ -46,7 +47,7 @@ html {
 .hero-container {
   position: relative;
   height: 100vh;
-  background-image: url("/public/hero/Image.png");
+  background-image: url("../assets/hero/image.png");
   background-size: cover;
   background-position: center;
 
@@ -176,7 +177,7 @@ html {
 }
 
 .action-section {
-    background-image: url("/public/cta.png");
+    background-image: url("../assets/cta.png");
     background-size: cover;
     background-position: center;
     height: 100vh;
