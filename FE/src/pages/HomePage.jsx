@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import "../styles/home.css";
 
 export default function HomePage() {
   const data = [

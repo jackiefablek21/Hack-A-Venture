@@ -1,8 +1,11 @@
 import { NavLink } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
+  const { user, logout } = useAuth();
+
   return (
-    <div className="header-wrapper">
+    <header className="header-wrapper">
       <div className="header-left">
         <NavLink
           to="/"
@@ -16,8 +19,8 @@ const Header = () => {
       </div>
 
       <div className="header-right">
-        <NavLink to="/skibidi" className="nav-link">
-          Skibidi
+        <NavLink to="/login" className="nav-link">
+          Login
         </NavLink>
 
         <NavLink to="/about" className="nav-link">
@@ -28,7 +31,9 @@ const Header = () => {
           Contact
         </NavLink>
       </div>
-    </div>
+
+      {user? "hi" : "sigma"}
+    </header>
   );
 };
 
