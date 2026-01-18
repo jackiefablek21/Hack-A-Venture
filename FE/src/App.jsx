@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage"
 import MapPage from "./pages/MapPage"
 import RegisterPage from "./pages/RegisterPage"
 import LoginPage from "./pages/LoginPage"
+import GovFacPage from "./pages/GovFacPage"
 
 import "./styles/App.css";
 import UserProfilePage from "./pages/userProfilePage"
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/GovFac" element={<GovFacPage />}></Route>
         
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
