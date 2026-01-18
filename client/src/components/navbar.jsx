@@ -1,4 +1,5 @@
 import { useWallet } from "../contexts/WalletContext.jsx";
+import InteractWithContract from "../contracts/SmartContract.jsx";
 
 const Navbar = () => {
     const { account, connectWallet } = useWallet();
@@ -11,6 +12,7 @@ const Navbar = () => {
             ) : (
                 <button onClick={connectWallet}>Connect Wallet</button>
             )}
+            <InteractWithContract></InteractWithContract>
         </nav>
     );
 }

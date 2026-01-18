@@ -1,5 +1,5 @@
 html {
-    scroll-snap-type: y mandatory;
+    /*scroll-snap-type: y mandatory;*/
     scroll-behavior: smooth;
 }
 
@@ -8,8 +8,8 @@ html {
 .goal-section,
 .action-section,
 .footer-wrapper {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  /*scroll-snap-align: start;*/
+  /*scroll-snap-stop: always;*/
 }
 
 /* Above does the snapping */

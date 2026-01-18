@@ -8,7 +8,17 @@ export const WalletProvider = ({ children }) => {
     const [signer, setSigner] = useState(null);
     const [chainId, setChainId] = useState(null);
 
-    // Function to connect wallet
+    const NEBULAS_CHAIN_ID_HEX = '0x9B4'; // 2484 in Hex
+    const NEBULAS_CHAIN_ID_DEC = 2484;
+
+    const nebulasParams = {
+        chainId: NEBULAS_CHAIN_ID_HEX,
+        chainName: 'U2U Nebulas Testnet',
+        nativeCurrency: { name: 'U2U', symbol: 'U2U', decimals: 18 },
+        rpcUrls: ['https://rpc-nebulas-testnet.u2u.xyz'],
+        blockExplorerUrls: ['https://testnet.u2uscan.xyz']
+    };
+
     const connectWallet = async () => {
         if (!window.ethereum) {
             alert("Please install MetaMask!");
@@ -17,11 +27,33 @@ export const WalletProvider = ({ children }) => {
 
         try {
             const provider = new ethers.BrowserProvider(window.ethereum);
-            const network = await provider.getNetwork();
 
-            // U2U Chain ID is 39
-            if (Number(network.chainId) !== 39) {
-                alert("Please switch to U2U Solaris Mainnet");
+            // Request accounts first (triggers MetaMask popup)
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+            // Check the network
+            const network = await provider.getNetwork();
+            const currentChainId = Number(network.chainId);
+
+            // If not on Nebulas Testnet, force switch
+            if (currentChainId !== NEBULAS_CHAIN_ID_DEC) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: NEBULAS_CHAIN_ID_HEX }],
+                    });
+                } catch (switchError) {
+                    // This error code means the chain has not been added to MetaMask
+                    if (switchError.code === 4902) {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [nebulasParams],
+                        });
+                    } else {
+                        throw switchError;
+                    }
+                }
+                // Refresh provider after network switch to be safe
                 return;
             }
 
@@ -30,22 +62,29 @@ export const WalletProvider = ({ children }) => {
 
             setAccount(address);
             setSigner(userSigner);
-            setChainId(Number(network.chainId));
+            setChainId(currentChainId);
+
         } catch (error) {
             console.error("Connection error:", error);
+            alert("Failed to connect wallet: " + error.message);
         }
     };
 
-    // Automatically listen for account or network changes
     useEffect(() => {
         if (window.ethereum) {
             window.ethereum.on("accountsChanged", (accounts) => {
-                if (accounts.length > 0) setAccount(accounts[0]);
-                else setAccount(null);
+                if (accounts.length > 0) {
+                    setAccount(accounts[0]);
+                    // Re-run connect to update signer
+                    connectWallet();
+                } else {
+                    setAccount(null);
+                    setSigner(null);
+                }
             });
 
             window.ethereum.on("chainChanged", () => {
-                window.location.reload(); // Refresh on network change
+                window.location.reload();
             });
         }
     }, []);
@@ -57,5 +96,4 @@ export const WalletProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use this context easily
 export const useWallet = () => useContext(WalletContext);
