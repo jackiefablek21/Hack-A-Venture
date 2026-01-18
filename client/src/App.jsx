@@ -7,6 +7,7 @@ import MapPage from "./pages/MapPage"
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import UserProfilePage from "./pages/userProfilePage.jsx";
+import GovFacPage from "./pages/GovFacPage.jsx"
 import "./styles/App.css";
 import "./styles/home.css";
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/user" element={<UserProfilePage />} />
+        <Route path="/GovFac" element={<GovFacPage />}></Route>
     </Routes>
         <Navbar>
         </Navbar>
