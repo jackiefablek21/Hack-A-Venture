@@ -50,7 +50,6 @@ export default function UserProfilePage() {
         </div>
         
       </div>
-      
 
       {/* TRANSACTION HISTORY */}
       <div className="user-transaction">

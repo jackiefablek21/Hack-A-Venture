@@ -1,16 +1,45 @@
 import { useState } from "react";
 import "../styles/login.css"
 import { useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
+
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
   let navigate = useNavigate();
-  const handleSubmit = (e) => {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login with:", email);
-    // later: POST /api/auth/login
+
+    try {
+      const res = await fetch("http://localhost:4000/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message);
+        return;
+      }
+
+      login(data.user);
+
+      console.log("Logged in user:", data);
+      alert("Login successful!");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -26,8 +55,10 @@ export default function LoginPage() {
               name="login-email"
               id="login-email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={(e) =>
+                setForm({ ...form, email: e.target.value })
+              }
             />
           </div>
 
@@ -38,8 +69,9 @@ export default function LoginPage() {
               name="login-password"
               id="login-password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
           </div>
           
