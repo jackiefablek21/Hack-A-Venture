@@ -1,5 +1,6 @@
 import { useWallet } from "../contexts/WalletContext.jsx";
 import InteractWithContract from "../contracts/SmartContract.jsx";
+import CompleteMission from "./CompleteMission.jsx";
 
 const Navbar = () => {
     const { account, connectWallet } = useWallet();
@@ -13,6 +14,7 @@ const Navbar = () => {
                 <button onClick={connectWallet}>Connect Wallet</button>
             )}
             <InteractWithContract></InteractWithContract>
+            <CompleteMission missionId={"example mission id"}></CompleteMission>
         </nav>
     );
 }

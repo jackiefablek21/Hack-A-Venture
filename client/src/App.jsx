@@ -12,11 +12,13 @@ function App() {
     <Header>
     </Header>
 
+
     <Routes>
         <Route path="/" element={<HomePage />}></Route>
     </Routes>
         <Navbar>
         </Navbar>
+
 
     <Footer></Footer>
     </>

@@ -4,11 +4,18 @@ require('dotenv').config();
 const cors = require('cors');
 const { provider, adminWallet } = require('./utils/blockchain');
 
+// 1. Import your rewards route
+const rewardRoutes = require('./routes/rewards');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Example Route: Get U2U Block Number
+// 2. Use the route
+// This means every route in rewards.js will now start with /api
+app.use('/api', rewardRoutes);
+
+// Existing block number route...
 app.get('/api/block', async (req, res) => {
     try {
         const blockNumber = await provider.getBlockNumber();
@@ -21,5 +28,4 @@ app.get('/api/block', async (req, res) => {
 const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
-    console.log("Connected to U2U Solaris via RPC");
 });

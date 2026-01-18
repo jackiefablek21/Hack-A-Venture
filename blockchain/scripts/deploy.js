@@ -7,10 +7,7 @@ async function main() {
     const Contract = await hhat.ethers.getContractFactory("HydraCoin");
 
     // 2. Deploy with a constructor argument (the project name)
-    // Pass the arguments IN ORDER as defined in your Solidity constructor
-    // Argument 1: "Hack-A-Venture Project" (String)
-    // Argument 2: 1000000 (Number)
-    const contract = await Contract.deploy("Hack-A-Venture Project");
+    const contract = await Contract.deploy();
 
     await contract.waitForDeployment();
 
