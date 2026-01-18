@@ -1,6 +1,9 @@
 import { NavLink } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
+  const { user, logout } = useAuth();
+
   return (
     <header className="header-wrapper">
       <div className="header-left">
@@ -28,6 +31,8 @@ const Header = () => {
           Contact
         </NavLink>
       </div>
+
+      {user? "hi" : "sigma"}
     </header>
   );
 };
