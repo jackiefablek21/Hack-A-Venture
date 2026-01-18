@@ -5,7 +5,7 @@ const cors = require('cors');
 const { provider, adminWallet } = require('./utils/blockchain');
 
 // 1. Import your rewards route
-const rewardRoutes = require('./routes/rewards');
+const rewardRoutes = require('./controllers/rewards');
 
 const app = express();
 app.use(cors());
