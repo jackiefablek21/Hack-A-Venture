@@ -3,8 +3,10 @@ import { ethers } from 'ethers';
 
 const MissionCard = ({ mission }) => {
     // States to give the user feedback
-    const [status, setStatus] = useState('idle'); // idle, loading, success, error
+    const [status, setStatus] = useState(mission.status === 'completed' ? 'success' : 'idle');
     const [message, setMessage] = useState('');
+
+
 
     const handleCompleteMission = async () => {
         if (!window.ethereum) {
@@ -63,6 +65,13 @@ const MissionCard = ({ mission }) => {
             <p>{mission.description}</p>
             <p><strong>Reward: {mission.amount} token</strong></p>
 
+            {
+                () => {
+                    if (mission.status === "completed"){
+                        setStatus('success');
+                    }
+                }
+            }
             <button
                 onClick={handleCompleteMission}
                 disabled={status === 'loading' || status === 'success'}

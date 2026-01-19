@@ -60,6 +60,18 @@ router.post('/reward', async (req, res) => {
         // Wait for the transaction to be mined on the U2U network
         const receipt = await tx.wait();
 
+        // Code here!!!!
+        const updatedMission = await Mission.findOneAndUpdate(
+            { missionId: mission.missionId }, // or use _id: mission._id
+            { status: "completed" },
+            { new: true } // returns the updated document
+        );
+        if (!updatedMission) {
+            console.warn(`Mission ${mission.missionId} not found in DB, but reward was sent.`);
+        } else {
+            console.log(`Mission ${mission.missionId} marked as completed.`);
+        }
+
         res.status(200).json({
             status: "Success",
             message: "Reward sent!",
