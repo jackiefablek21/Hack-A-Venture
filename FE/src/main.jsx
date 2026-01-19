@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router'
 import { WalletProvider } from "./contexts/WalletContext.jsx";
 import App from './App.jsx'
 
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext.jsx";
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
