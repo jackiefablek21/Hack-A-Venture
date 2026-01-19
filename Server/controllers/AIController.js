@@ -33,4 +33,13 @@ router.post('/sendPrompt', async (req, res) => {
     }
 });
 
+router.post('/generateQuest', async (req, res) => {
+    try {
+        const {userInput, history = []} = req.body;
+    } catch (error) {
+        console.error("Error:", error.message);
+        res.status(500).json({error: "AI Processing Failed", details: error.message});
+    }
+});
+
 export default router;

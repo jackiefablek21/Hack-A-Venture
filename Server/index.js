@@ -6,7 +6,7 @@ import cors from "cors";
 import {provider, adminWallet} from './utils/blockchain.js';
 import rewardRoutes from './controllers/MissionController.js';
 import userRoutes from './routes/UserRouting.js';
-import langchainController from './controllers/LangChainController.js';
+import langchainController from './controllers/AIController.js';
 import {connectDB} from './utils/databaseConnection.js';
 
 const MONGO_URI = process.env.MONGO_URI
