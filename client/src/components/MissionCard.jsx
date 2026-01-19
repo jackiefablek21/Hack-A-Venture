@@ -1,8 +1,7 @@
 import  { useState } from 'react';
 import { ethers } from 'ethers';
 
-// eslint-disable-next-line react/prop-types
-const CompleteMission = ({ missionId }) => {
+const MissionCard = ({ mission }) => {
     // States to give the user feedback
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
     const [message, setMessage] = useState('');
@@ -22,7 +21,7 @@ const CompleteMission = ({ missionId }) => {
             const walletAddress = await signer.getAddress();
 
             // 1. Create a message to sign
-            const signingMessage = `I completed mission ${missionId} for HydraCoin rewards.`;
+            const signingMessage = `I completed mission ${mission.missionId} for HydraCoin rewards.`;
 
             // 2. Ask user to sign (This is free for the user, no gas)
             const signature = await signer.signMessage(signingMessage);
@@ -35,7 +34,7 @@ const CompleteMission = ({ missionId }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     walletAddress,
-                    missionId,
+                    mission,
                     signature,
                     message: signingMessage
                 })
@@ -60,7 +59,7 @@ const CompleteMission = ({ missionId }) => {
 
     return (
         <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <h3>Mission ID: {missionId}</h3>
+            <h3>Mission ID: {mission.missionId}</h3>
 
             <button
                 onClick={handleCompleteMission}
@@ -88,4 +87,4 @@ const CompleteMission = ({ missionId }) => {
     );
 }
 
-export default CompleteMission;
+export default MissionCard;

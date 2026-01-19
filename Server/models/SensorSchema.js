@@ -21,7 +21,7 @@ const sensorSchema = new mongoose.Schema({
     },
 
     datas:{
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         ref: 'Data'
     },
 

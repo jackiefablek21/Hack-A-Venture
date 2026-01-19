@@ -3,11 +3,11 @@ import dotenv from "dotenv";
 dotenv.config();
 import {ethers} from "ethers";
 import cors from "cors";
-import {provider, adminWallet} from './utils/blockchain.js';
-import rewardRoutes from './controllers/MissionController.js';
-import userRoutes from './routes/UserRouting.js';
-import langchainController from './controllers/AIController.js';
-import {connectDB} from './utils/databaseConnection.js';
+import {provider, adminWallet} from './utils/Blockchain.js';
+import MissionController from './controllers/MissionController.js';
+import userRoutes from './controllers/UserLoginController.js';
+import AIController from './controllers/AIController.js';
+import {connectDB} from './utils/DatabaseConnection.js';
 
 const MONGO_URI = process.env.MONGO_URI
 connectDB(MONGO_URI);
@@ -19,8 +19,8 @@ app.use(express.json());
 
 // 2. Use the route
 // This means every route in MissionController.js will now start with /api
-app.use('/api/missions', rewardRoutes);
-app.use('/api/ai', langchainController);
+app.use('/api/missions', MissionController);
+app.use('/api/ai', AIController);
 app.use("/api/users", userRoutes);
 
 // Existing block number route...
