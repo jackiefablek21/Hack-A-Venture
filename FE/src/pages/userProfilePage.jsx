@@ -27,7 +27,7 @@ export default function UserProfilePage() {
   });
 
   return (
-    <main class="user-wrapper">
+    <main className="user-wrapper">
       <div className="user-top">
         {/* BASIC INFO */}
         <div className="user-info">
@@ -50,6 +50,7 @@ export default function UserProfilePage() {
         </div>
         
       </div>
+      
 
       {/* TRANSACTION HISTORY */}
       <div className="user-transaction">
