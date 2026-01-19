@@ -3,12 +3,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import {ethers} from "ethers";
 import cors from "cors";
-
 import {provider, adminWallet} from './utils/blockchain.js';
-// 1. Import your rewards route
-
 import rewardRoutes from './controllers/MissionController.js';
-import userRoutes from './controllers/UserLoginController.js';
+import userRoutes from './routes/UserRouting.js';
 import langchainController from './controllers/LangChainController.js';
 import {connectDB} from './utils/databaseConnection.js';
 
