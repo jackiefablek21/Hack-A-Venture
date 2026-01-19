@@ -9,7 +9,7 @@ import {provider, adminWallet} from './utils/blockchain.js';
 
 import rewardRoutes from './controllers/rewards.js';
 import {connectDB} from './utils/databaseConnection.js';
-import userRoutes from './routes/user.routes.js';
+import userRoutes from './controllers/userLoginController.js';
 
 const MONGO_URI = process.env.MONGO_URI
 connectDB(MONGO_URI);

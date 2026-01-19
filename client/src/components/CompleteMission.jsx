@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { ethers } from 'ethers';
 
+// eslint-disable-next-line react/prop-types
 const CompleteMission = ({ missionId }) => {
     // States to give the user feedback
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
@@ -29,7 +30,7 @@ const CompleteMission = ({ missionId }) => {
             setMessage('Verifying with server and sending rewards...');
 
             // 3. Send to your Node.js backend
-            const response = await fetch('http://localhost:5000/api/missions/reward', {
+            const response = await fetch('http://localhost:4000/api/missions/reward', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
