@@ -37,7 +37,7 @@ export default function GovernmentPage() {
   };
 
   return (
-    <div className='app-wrapper'>
+    <div className='gov-app-wrapper'>
       {/* Navigation / Header - Keeping consistency with Home */}
       <nav className="dashboard-nav">
         <h1 className='nav-title'>HydraLink <span className="badge">Gov/Factory Portal</span></h1>
