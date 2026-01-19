@@ -19,29 +19,41 @@ const ChatComponent = () => {
         if (!input.trim()) return;
 
         const userMessage = { role: 'user', content: input };
-        setMessages((prev) => [...prev, userMessage]);
+
+        // UI update
+        const updatedMessages = [...messages, userMessage];
+        setMessages(updatedMessages);
         setInput('');
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:4000/api/langchain/sendPrompt', {
+            const historyForAPI = updatedMessages.filter((msg, index) => {
+                if (index === 0 && msg.role === 'assistant') return false;
+                return true;
+            });
+
+            const response = await fetch('http://localhost:4000/api/ai/sendPrompt', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     userInput: input,
-                    history: messages // Sending history for LangChain context
+                    history: historyForAPI // Send the existing state
                 }),
             });
 
             const data = await response.json();
-            console.log("Response" + data);
 
-            setMessages((prev) => [
-                ...prev,
-                { role: 'assistant', content: data.response }
-            ]);
+            // 2. The critical change: match the backend key
+            if (data.response) {
+                setMessages((prev) => [
+                    ...prev,
+                    { role: 'assistant', content: data.response }
+                ]);
+            } else if (data.error) {
+                console.error("Backend Error:", data.error);
+            }
         } catch (error) {
-            console.error("Error calling LangChain API:", error);
+            console.error("Network Error:", error);
         } finally {
             setIsLoading(false);
         }

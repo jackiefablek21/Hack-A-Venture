@@ -23,7 +23,7 @@ app.use(express.json());
 // 2. Use the route
 // This means every route in MissionController.js will now start with /api
 app.use('/api/missions', rewardRoutes);
-app.use('/api/langchain', langchainController);
+app.use('/api/ai', langchainController);
 app.use("/api/users", userRoutes);
 
 // Existing block number route...
