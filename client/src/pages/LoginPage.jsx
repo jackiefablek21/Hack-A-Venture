@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/login.css"
 import { useNavigate } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 
 export default function LoginPage() {
