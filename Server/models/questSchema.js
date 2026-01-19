@@ -10,7 +10,8 @@ const questSchema = new mongoose.Schema({
   sensorId: {
     type: String,
     required: true,
-    index: true
+    index: true,
+    ref: 'Sensor'
   },
 
   title: {
@@ -30,7 +31,7 @@ const questSchema = new mongoose.Schema({
     },
     token: {
       type: String,
-      default: "TrietCoin"
+      default: "HydraCoin"
     }
   },
 
