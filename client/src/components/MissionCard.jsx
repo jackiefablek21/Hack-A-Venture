@@ -59,7 +59,9 @@ const MissionCard = ({ mission }) => {
 
     return (
         <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <h3>Mission ID: {mission.missionId}</h3>
+            <p><strong>Mission Title: {mission.title}</strong></p>
+            <p>{mission.description}</p>
+            <p><strong>Reward: {mission.amount} token</strong></p>
 
             <button
                 onClick={handleCompleteMission}

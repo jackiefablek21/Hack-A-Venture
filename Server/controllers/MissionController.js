@@ -52,7 +52,7 @@ router.post('/reward', async (req, res) => {
         console.log(`Verifying mission ${mission.missionId} for ${walletAddress}...`);
 
         // --- EXECUTION: Send the Reward ---
-        const rewardAmount = ethers.parseUnits(mission.amount, 18); // Send 10 SKBD tokens
+        const rewardAmount = ethers.parseUnits((mission.amount).toString(), 18); // Send 10 SKBD tokens
 
         console.log("Initiating transfer from Treasury...");
         const tx = await tokenContract.transfer(walletAddress, rewardAmount);
