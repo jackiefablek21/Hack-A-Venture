@@ -4,7 +4,6 @@ import { useAuth } from "../contexts/AuthContext";
 const Header = () => {
   const { user, logout } = useAuth();
 
-  console.log(user)
 
   return (
     <header className="header-wrapper">

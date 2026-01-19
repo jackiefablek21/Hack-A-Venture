@@ -1,5 +1,8 @@
 import {ethers} from "ethers";
 import express from "express";
+import Mission from "../models/MissionSchema.js";
+import Sensor from '../models/SensorSchema.js';
+import Data from '../models/DataSchema.js';
 
 const router = express.Router();
 
@@ -17,9 +20,22 @@ const MINIMAL_ERC20_ABI = [
 ];
 const tokenContract = new ethers.Contract(CONTRACT_ADDRESS, MINIMAL_ERC20_ABI, treasuryWallet);
 
+router.post('/getAll', async (req, res) =>{
+    try {
+        const missions = await Mission.find({})
+            .populate('sensor')
+            .sort({ lastUpdated: -1 }); // Show newest first
+
+        res.status(200).json(missions);
+    } catch (error) {
+        console.error("Get Mission List Error:", error);
+        res.status(500).json({ error: "Get mission list failed: " + error.message });
+    }
+});
+
 router.post('/reward', async (req, res) => {
     try {
-        const { walletAddress, missionId, signature, message } = req.body;
+        const { walletAddress, mission, signature, message } = req.body;
 
         // --- SECURITY CHECK 1: Cryptographic Verification ---
         // This recovers the address that actually signed the message
@@ -33,10 +49,10 @@ router.post('/reward', async (req, res) => {
         // Here you would check your database:
         // 1. Does the missionId exist?
         // 2. Has this wallet already claimed this mission?
-        console.log(`Verifying mission ${missionId} for ${walletAddress}...`);
+        console.log(`Verifying mission ${mission.missionId} for ${walletAddress}...`);
 
         // --- EXECUTION: Send the Reward ---
-        const rewardAmount = ethers.parseUnits("10", 18); // Send 10 SKBD tokens
+        const rewardAmount = ethers.parseUnits(mission.amount, 18); // Send 10 SKBD tokens
 
         console.log("Initiating transfer from Treasury...");
         const tx = await tokenContract.transfer(walletAddress, rewardAmount);
