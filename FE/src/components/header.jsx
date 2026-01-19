@@ -30,20 +30,24 @@ const Header = () => {
       </div>
 
       <div className="header-right">
-        <NavLink to="/login" className="nav-link">
-          Login
-        </NavLink>
+        
 
         <NavLink to="/about" className="nav-link">
           About us
         </NavLink>
 
         <NavLink to="/contact" className="nav-link">
-          Contact
+          SDG 6
         </NavLink>
       </div>
-      {user? `${user.email}`:'no'}
+      <div>
+        <NavLink to="/login" className="nav-link">
+          Login
+        </NavLink>
+        {user? `${user.email}`:'no'}
       <button onClick={() => logout()}>logout</button>
+      </div>
+      
     </header> 
   );
 };
