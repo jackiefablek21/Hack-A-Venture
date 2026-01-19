@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const sensorSchema = new mongoose.Schema({
     sensorId: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true
+        type: String,
+        required: true,
+        unique: true,
+        index: true
     },
 
     location: {
@@ -26,14 +26,14 @@ const sensorSchema = new mongoose.Schema({
     },
 
     riverName: {
-    type: String,
-    required: true
+        type: String,
+        required: true
     },
 
     lastUpdated: {
-    type: Date,
-    default: Date.now
+        type: Date,
+        default: Date.now
     }
 });
 
-module.exports = mongoose.model("Sensor", sensorSchema);
+export default mongoose.model("Sensor", sensorSchema);
