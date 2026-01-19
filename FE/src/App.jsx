@@ -1,36 +1,32 @@
-import Header from "./components/header.jsx"
-import Footer from "./components/footer.jsx"
-import Navbar from "./components/navbar.jsx"
+import Header from "./components/header"
+import Footer from "./components/footer"
 import { Route, Routes } from "react-router"
-import HomePage from "./pages/HomePage.jsx"
+import HomePage from "./pages/HomePage"
 import MapPage from "./pages/MapPage"
-import LoginPage from "./pages/LoginPage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
-import UserProfilePage from "./pages/userProfilePage.jsx";
-import GovFacPage from "./pages/GovFacPage.jsx"
-import "./styles/App.css";
-import "./styles/home.css";
+import RegisterPage from "./pages/RegisterPage"
+import LoginPage from "./pages/LoginPage"
+import GovFacPage from "./pages/GovFacPage"
 
+import "./styles/App.css";
+import UserProfilePage from "./pages/userProfilePage"
 function App() {
   return (
     <>
-    <Header>
-    </Header>
+      <Header/>
 
-
-    <Routes>
+      <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/govfac" element={<GovFacPage />}></Route>
+        
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/user" element={<UserProfilePage />} />
-        <Route path="/GovFac" element={<GovFacPage />}></Route>
-    </Routes>
-        <Navbar>
-        </Navbar>
+        <Route path="/quest:id" element={<UserProfilePage />} />
 
+      </Routes>
 
-    <Footer></Footer>
+      <Footer/>
     </>
   )
 }

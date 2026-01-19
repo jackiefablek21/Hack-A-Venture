@@ -1,0 +1,26 @@
+.map-wrapper {
+  position: relative;
+  padding: 4rem 3rem;
+  background-image: url("../assets/hero/Image.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.map-container {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+}

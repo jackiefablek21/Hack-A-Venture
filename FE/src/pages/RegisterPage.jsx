@@ -16,10 +16,27 @@ export default function RegisterPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register data:", form);
-    // later: POST /api/users
+
+    try {
+      const res = await fetch("http://localhost:4000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        throw new Error("Registration failed");
+      }
+
+      const data = await res.json();
+      console.log("User created:", data);
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   return (
@@ -31,6 +48,8 @@ export default function RegisterPage() {
           <div>
             <label htmlFor="email">Email:</label>
             <input
+              required
+              type="email"
               className="register-input"
               name="email"
               placeholder="Email"
@@ -42,6 +61,9 @@ export default function RegisterPage() {
           <div>
             <label htmlFor="password">Password:</label>
             <input
+              required
+              minLength={8}
+              maxLength={20}
               className="register-input"
               name="password"
               type="password"
