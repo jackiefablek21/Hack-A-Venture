@@ -7,9 +7,10 @@ import cors from "cors";
 import {provider, adminWallet} from './utils/blockchain.js';
 // 1. Import your rewards route
 
-import rewardRoutes from './controllers/rewards.js';
+import rewardRoutes from './controllers/MissionController.js';
+import userRoutes from './controllers/UserLoginController.js';
+import langchainController from './controllers/LangChainController.js';
 import {connectDB} from './utils/databaseConnection.js';
-import userRoutes from './controllers/userLoginController.js';
 
 const MONGO_URI = process.env.MONGO_URI
 connectDB(MONGO_URI);
@@ -20,8 +21,9 @@ app.use(cors());
 app.use(express.json());
 
 // 2. Use the route
-// This means every route in rewards.js will now start with /api
+// This means every route in MissionController.js will now start with /api
 app.use('/api/missions', rewardRoutes);
+app.use('/api/langchain', langchainController);
 app.use("/api/users", userRoutes);
 
 // Existing block number route...
