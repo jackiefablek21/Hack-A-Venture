@@ -14,6 +14,7 @@ function App() {
     <>
       <Header/>
 
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/map" element={<MapPage />} />
@@ -25,6 +26,8 @@ function App() {
         <Route path="/quest:id" element={<UserProfilePage />} />
 
       </Routes>
+
+
 
       <Footer/>
     </>

@@ -3,13 +3,10 @@ import dotenv from "dotenv";
 dotenv.config();
 import {ethers} from "ethers";
 import cors from "cors";
-
 import {provider, adminWallet} from './utils/blockchain.js';
-// 1. Import your rewards route
-
 import rewardRoutes from './controllers/MissionController.js';
-import userRoutes from './controllers/UserLoginController.js';
-import langchainController from './controllers/LangChainController.js';
+import userRoutes from './routes/UserRouting.js';
+import langchainController from './controllers/AIController.js';
 import {connectDB} from './utils/databaseConnection.js';
 
 const MONGO_URI = process.env.MONGO_URI

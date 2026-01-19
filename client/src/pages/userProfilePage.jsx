@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "../components/navbar.jsx"
 import "../styles/user.css"
 export default function UserProfilePage() {
   // MOCK USER DATA
@@ -42,6 +43,7 @@ export default function UserProfilePage() {
         </div>
 
         {/* WALLET */}
+          <Navbar/>
         <div className="user-wallet">
           <h2>Wallet</h2>
           <p>
