@@ -21,4 +21,7 @@ const dataSchema = new mongoose.Schema({
     },
 
 });
-export default mongoose.model("Data", dataSchema);
+
+const Data = mongoose.models.Data || mongoose.model('Data', dataSchema);
+
+export default Data;

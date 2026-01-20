@@ -37,18 +37,6 @@ const missionSchema = new mongoose.Schema({
         required: true
     },
 
-    participantLimit: {
-    type: Number,
-    default: 10
-    },
-
-    participants: [
-        {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-        }
-    ],
-
     status: {
         type: String,
         enum: ["active", "completed", "expired"],
@@ -65,4 +53,6 @@ const missionSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model("Mission", missionSchema);
+const Mission = mongoose.models.Mission || mongoose.model('Mission', missionSchema);
+
+export default Mission;

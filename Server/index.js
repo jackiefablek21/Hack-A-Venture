@@ -6,10 +6,10 @@ import {ethers} from "ethers";
 import cors from "cors";
 import {provider, adminWallet} from './utils/blockchain.js';
 import rewardRoutes from './controllers/MissionController.js';
-import userRoutes from './routes/userRoutes.js';
+import userRoutes from './controllers/UserLoginController.js';
 import sensorRoutes from './routes/sensorRoutes.js';
 import missionRoutes from './routes/missionRoutes.js';
-import langchainController from './controllers/AIController.js';
+import AIController from './controllers/AIController.js';
 import {connectDB} from './utils/databaseConnection.js';
 
 const MONGO_URI = process.env.MONGO_URI
@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // 2. Use the route
 app.use('/api/missions', rewardRoutes);
-app.use('/api/ai', langchainController);
+app.use('/api/ai', AIController);
 app.use("/api/users", userRoutes);
 app.use("/api/sensors", sensorRoutes);
 app.use("/api/missions", missionRoutes);
