@@ -6,6 +6,7 @@ import MapPage from "./pages/MapPage"
 import RegisterPage from "./pages/RegisterPage"
 import LoginPage from "./pages/LoginPage"
 import GovFacPage from "./pages/GovFacPage"
+import QuestDetailPage from "./pages/QuestDetailPage"
 
 import "./styles/App.css";
 import UserProfilePage from "./pages/userProfilePage"
@@ -23,7 +24,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/user" element={<UserProfilePage />} />
-        <Route path="/quest:id" element={<UserProfilePage />} />
+
+        <Route path="/quests/:id" element={<QuestDetailPage />} />
 
       </Routes>
 

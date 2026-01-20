@@ -33,7 +33,7 @@ export default function LoginPage() {
         return;
       }
 
-      login(data.user);
+      login(data.user, data.token);
 
       console.log("Logged in user:", data);
       alert("Login successful!");

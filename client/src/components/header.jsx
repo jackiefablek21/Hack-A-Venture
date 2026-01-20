@@ -10,15 +10,6 @@ const Header = () => {
     <header className="header-wrapper">
       <div className="header-left">
         <NavLink
-          to="/"
-          end
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          Home
-        </NavLink>
-        <NavLink
           to="/map"
           end
           className={({ isActive }) =>
@@ -30,8 +21,14 @@ const Header = () => {
       </div>
 
       <div className="header-right">
-        <NavLink to="/login" className="nav-link">
-          Login
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
+          Home
         </NavLink>
 
         <NavLink to="/about" className="nav-link">
@@ -41,9 +38,17 @@ const Header = () => {
         <NavLink to="/contact" className="nav-link">
           Contact
         </NavLink>
+        
       </div>
-      {user? `${user.email}`:'no'}
-      <button onClick={() => logout()}>logout</button>
+      <div>
+        <NavLink to="/login" className="nav-link">
+          Login
+        </NavLink>
+        
+        {user? `${user.email} || ${user.role}`:'no'}
+        <button onClick={() => logout()}>logout</button>
+      </div>
+
     </header> 
   );
 };
