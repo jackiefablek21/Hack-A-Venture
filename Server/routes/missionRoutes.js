@@ -39,7 +39,7 @@ router.get("/sensor/:sensorId", async (req, res) => {
         }
     });
 
-    console.log(missions.toString());
+    // console.log(missions.toString());
 
     res.json(missions);
   } catch (err) {

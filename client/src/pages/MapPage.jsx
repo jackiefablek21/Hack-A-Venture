@@ -17,6 +17,21 @@ export default function MapPage() {
     const [missions, setMissions] = useState([]);
     const [showCreateCampaign, setShowCreateCampaign] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
+
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        amount: '',
+        severity: 'medium', // Default value
+        participantLimit: '10',
+    });
+    // Helper to handle manual typing
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const { user } = useAuth();
 
     function getSensorIcon(sensor) {
@@ -35,13 +50,57 @@ export default function MapPage() {
         // 3. Calculate the average
         const averageTds = totalTds / dataRecords.length;
 
-        console.log(`Average TDS for ${sensor.name || 'Sensor'}:`, averageTds);
+        // console.log(`Average TDS for ${sensor.name || 'Sensor'}:`, averageTds);
 
         // 4. Return icon based on average
         if (averageTds >= 500) return redIcon;
         if (averageTds >= 200) return yellowIcon;
         return greenIcon;
     }
+
+    const handleGenerateQuests = async () => {
+        setLoading(true);
+        setMessage('Connecting to Gemini AI... this may take a minute.');
+
+        try {
+            const response = await fetch('http://localhost:4000/api/ai/generateQuest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ sensor: selectedSensor })
+            });
+
+            const data = await response.json();
+
+            // Mapping AI fields to your Form State
+            if (data && data.response) {
+                const aiMission = data.response;
+
+                setFormData({
+                    title: aiMission.title || '',
+                    description: aiMission.description || '',
+                    amount: aiMission.amount || '',
+                    severity: aiMission.severity || 'medium',
+                    participantLimit: aiMission.participantLimit || '10',
+                });
+                setMessage("AI content loaded into form!");
+            } else if (data.error) {
+                setMessage(`Error: ${data.error}`);
+            }
+
+            if (response.ok) {
+                setMessage(`Success! Generated ${data.count || ''} new missions.`);
+            } else {
+                setMessage(`Error: ${data.error || 'Failed to generate'}`);
+            }
+        } catch (error) {
+            console.error("Request failed:", error);
+            setMessage('Server error. Please check if the backend is running.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleDeleteCampaign = async (missionId) => {
         const confirmDelete = window.confirm(
@@ -67,7 +126,7 @@ export default function MapPage() {
             try {
                 const res = await fetch("http://localhost:4000/api/sensors");
                 const data = await res.json();
-                console.log(data)
+                // console.log(data)
                 setSensors(data);
             } catch (err) {
                 console.error("Failed to fetch sensors", err);
@@ -162,12 +221,14 @@ export default function MapPage() {
                                         </div>
                                         <button className="detail-button" onClick={() => navigate(`/quests/${mission._id}`)}>Campaign details</button>
                                         {user?.role === "admin" && (
-                                            <button
-                                                className="delete-button"
-                                                onClick={() => handleDeleteCampaign(mission._id)}
-                                            >
-                                                Remove campaign
-                                            </button>
+                                            <>
+                                                <button
+                                                    className="delete-button"
+                                                    onClick={() => handleDeleteCampaign(mission._id)}
+                                                >
+                                                    Remove campaign
+                                                </button>
+                                            </>
                                         )}
                                     </div>
                                 </li>
@@ -195,17 +256,15 @@ export default function MapPage() {
                                     onSubmit={async (e) => {
                                         e.preventDefault();
 
-                                        const form = e.target;
 
                                         const payload = {
-                                            missionId: `Q-${Date.now()}`,
                                             sensor: selectedSensor._id,
-                                            title: form.title.value,
-                                            description: form.description.value,
-                                            amount: Number(form.amount.value),
-                                            severity: form.severity.value,
-                                            participantLimit: form.participantLimit.value,
-                                            expiresAt: form.expiresAt.value || null
+                                            title: formData.title,
+                                            description: formData.description,
+                                            amount: Number(formData.amount),
+                                            severity: formData.severity,
+                                            participantLimit: formData.participantLimit,
+                                            expiresAt: e.target.expiresAt.value || null
                                         };
 
                                         await fetch("http://localhost:4000/api/missions", {
@@ -217,29 +276,29 @@ export default function MapPage() {
                                             credentials: "include",
                                             body: JSON.stringify(payload),
                                         });
-                                        console.log(payload)
+                                        // console.log(payload)
                                         setShowCreateCampaign(false);
                                         alert("Campaign created!");
                                     }}
                                 >
                                     <label>
                                         Title
-                                        <input name="title" required />
+                                        <input name="title" value={formData.title} onChange={handleChange} required />
                                     </label>
 
                                     <label>
                                         Description
-                                        <textarea name="description" required />
+                                        <textarea name="description" value={formData.description} onChange={handleChange} required />
                                     </label>
 
                                     <label>
                                         Reward Amount
-                                        <input name="amount" type="number" required />
+                                        <input name="amount" type="number" value={formData.amount} onChange={handleChange} required />
                                     </label>
 
                                     <label>
                                         Severity
-                                        <select name="severity" required>
+                                        <select name="severity" value={formData.severity} onChange={handleChange} required>
                                             <option value="low">Low</option>
                                             <option value="medium">Medium</option>
                                             <option value="high">High</option>
@@ -248,11 +307,7 @@ export default function MapPage() {
 
                                     <label>
                                         Participants
-                                        <select name="participantLimit">
-                                            <option value="10">10</option>
-                                            <option value="20">20</option>
-                                            <option value="30">30</option>
-                                        </select>
+                                        <input name="participantLimit" value={formData.participantLimit} onChange={handleChange} required />
                                     </label>
 
                                     <label>
@@ -261,6 +316,18 @@ export default function MapPage() {
                                     </label>
 
                                     <button type="submit">Create</button>
+                                    <button
+                                        type="button"
+                                        onClick={handleGenerateQuests}
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'AI is Generating...' : 'Generate Misson Content'}
+                                    </button>
+                                    {message && (
+                                        <p style={{ marginTop: '15px', color: message.includes('Error') ? 'red' : 'green' }}>
+                                            {message}
+                                        </p>
+                                    )}
                                 </form>
                             </aside>
                         </div>

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default async function generateMissionDetails(sensorContext) {
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY_1);
 
     // 1. Define the model with System Instructions
     const model = genAI.getGenerativeModel({
@@ -17,16 +17,14 @@ export default async function generateMissionDetails(sensorContext) {
     const schema = {
         type: "object",
         properties: {
-            missionId: { type: "string" },
-            sensor: { type: "string", description: "The sensor context provided in the propmt" },
             title: { type: "string" },
             description: { type: "string" },
             amount: { type: "number", description: "The reward amount or numeric value for the mission" }, // Ensure this is 'number'
             severity: { type: "string", enum: ["low", "medium", "high"] },
             status: { type: "string" },
-            expiresAt: { type: "string" }
+            participantLimit: { type: "number" },
         },
-        required: ["missionId", "sensor", "title", "description", "severity", "status", "amount"]
+        required: ["title", "description", "severity", "status", "amount", "participantLimit"]
     };
 
     // 3. Set up the generation config
@@ -53,28 +51,3 @@ export default async function generateMissionDetails(sensorContext) {
         return null;
     }
 }
-
-// const generedJSON = await generateMissionDetails("{\n" +
-//     "    \"location\": {\n" +
-//     "        \"lat\": 10.750082395708914,\n" +
-//     "        \"lng\": 106.670648591217\n" +
-//     "    },\n" +
-//     "    \"_id\": \"696f1b8e7fe42e4f7be5c949\",\n" +
-//     "    \"sensorId\": \"SN-VN-02\",\n" +
-//     "    \"datas\": [\n" +
-//     "        {\n" +
-//     "            \"metrics\": {\n" +
-//     "                \"tds\": 650\n" +
-//     "            },\n" +
-//     "            \"_id\": \"696f1b8e7fe42e4f7be5c944\",\n" +
-//     "            \"dataId\": \"D-001\",\n" +
-//     "            \"recordTime\": \"2026-01-20T06:07:10.715Z\",\n" +
-//     "            \"__v\": 0\n" +
-//     "        }\n" +
-//     "    ],\n" +
-//     "    \"riverName\": \"Saigon River\",\n" +
-//     "    \"lastUpdated\": \"2026-01-20T06:07:10.823Z\",\n" +
-//     "    \"__v\": 0\n" +
-//     "}");
-//
-// console.log("Gen JSON: ", generedJSON);

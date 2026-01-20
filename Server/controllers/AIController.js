@@ -38,13 +38,26 @@ router.post('/generateQuest', async (req, res) => {
     try {
         const {sensor} = req.body;
 
-        const generatedMission = generateMissionDetails(sensor);
+        const generatedMission = await generateMissionDetails(sensor);
+        // const generatedMission = {
+        //     "title": "Saigon River Microplastic Sampling",
+        //     "description": "Collect and document water samples at designated coordinates to analyze microplastic concentration levels following recent heavy rainfall.",
+        //     "amount": 75.50,
+        //     "severity": "medium",
+        //     "status": "active",
+        //     "participantLimit": 15
+        // };
+
+
+
 
         generatedMission.status = "active";
         generatedMission.participants = {};
-        generatedMission.sensor = sensor;
+        generatedMission.sensor = sensor._id;
 
         console.log("generated quest: ", generatedMission);
+
+        res.json({ response: generatedMission });
 
     } catch (error) {
         console.error("Error:", error.message);
