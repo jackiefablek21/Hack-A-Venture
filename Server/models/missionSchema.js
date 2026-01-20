@@ -3,12 +3,6 @@ const { Schema } = mongoose;
 
 
 const missionSchema = new mongoose.Schema({
-    missionId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-
     sensor: {
         type: Schema.Types.ObjectId,
         required: true,

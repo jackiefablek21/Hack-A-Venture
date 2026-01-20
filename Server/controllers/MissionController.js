@@ -49,7 +49,7 @@ router.post('/reward', async (req, res) => {
         // Here you would check your database:
         // 1. Does the missionId exist?
         // 2. Has this wallet already claimed this mission?
-        console.log(`Verifying mission ${mission.missionId} for ${walletAddress}...`);
+        console.log(`Verifying mission ${mission._id} for ${walletAddress}...`);
 
         // --- EXECUTION: Send the Reward ---
         const rewardAmount = ethers.parseUnits((mission.amount).toString(), 18); // Send 10 SKBD tokens
@@ -62,14 +62,14 @@ router.post('/reward', async (req, res) => {
 
         // Code here!!!!
         const updatedMission = await Mission.findOneAndUpdate(
-            { missionId: mission.missionId }, // or use _id: mission._id
+            { _id: mission._id }, // or use _id: mission._id
             { status: "completed" },
             { new: true } // returns the updated document
         );
         if (!updatedMission) {
-            console.warn(`Mission ${mission.missionId} not found in DB, but reward was sent.`);
+            console.warn(`Mission ${mission._id} not found in DB, but reward was sent.`);
         } else {
-            console.log(`Mission ${mission.missionId} marked as completed.`);
+            console.log(`Mission ${mission._id} marked as completed.`);
         }
 
         res.status(200).json({

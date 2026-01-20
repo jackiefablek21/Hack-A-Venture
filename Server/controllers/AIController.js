@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import generateMissionDetails from '../utils/AIPrompt.js';
 import express from "express";
 
 const router = express.Router();
@@ -35,7 +36,16 @@ router.post('/sendPrompt', async (req, res) => {
 
 router.post('/generateQuest', async (req, res) => {
     try {
-        const {userInput, history = []} = req.body;
+        const {sensor} = req.body;
+
+        const generatedMission = generateMissionDetails(sensor);
+
+        generatedMission.status = "active";
+        generatedMission.participants = {};
+        generatedMission.sensor = sensor;
+
+        console.log("generated quest: ", generatedMission);
+
     } catch (error) {
         console.error("Error:", error.message);
         res.status(500).json({error: "AI Processing Failed", details: error.message});

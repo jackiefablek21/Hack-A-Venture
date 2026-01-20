@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
-import Data from '../models/DataSchema.js';
-import Sensor from '../models/SensorSchema.js';
-import Mission from '../models/MissionSchema.js'; // Ensure the path is correct
 import dotenv from "dotenv";
+
+import Data from '../../models/dataSchema.js';
+import Sensor from '../../models/sensorSchema.js';
+import Mission from '../../models/missionSchema.js';
+
 dotenv.config();
 
 const seedDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect('mongodb+srv://hackflare:hackflare@cluster0.prap8.mongodb.net/Hackflare');
 
         // 1. Clear all existing data
         await Data.deleteMany({});
@@ -16,66 +18,114 @@ const seedDB = async () => {
 
         // 2. Create the Data entries (Historical readings)
         const dataEntries = await Data.insertMany([
-            { dataId: "D-001", metrics: { tds: 120 }, status: "good", recordTime: new Date() },
-            { dataId: "D-002", metrics: { tds: 450 }, status: "warning", recordTime: new Date() },
-            { dataId: "D-003", metrics: { tds: 850 }, status: "danger", recordTime: new Date() }
+            { dataId: "D-001", metrics: { tds: Math.floor(Math.random() * 1000) }, status: "good", recordTime: new Date() },
+            { dataId: "D-002", metrics: { tds: Math.floor(Math.random() * 1000) }, status: "warning", recordTime: new Date() },
+            { dataId: "D-003", metrics: { tds: Math.floor(Math.random() * 1000) }, status: "danger", recordTime: new Date() }
         ]);
 
         // 3. Create Sensors (Linking to the data array)
         const sensors = await Sensor.insertMany([
             {
-                sensorId: "SN-MISS-01",
-                location: { lat: 29.9511, lng: -90.0715 },
-                riverName: "Mississippi River",
-                datas: [dataEntries[0]._id]
+                sensorId: "SN-VN-01",
+                location: { lat: 10.79048681125462, lng: 106.68138665565148 },
+                riverName: "Saigon River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
             },
             {
-                sensorId: "SN-HUD-02",
-                location: { lat: 40.7128, lng: -74.0060 },
-                riverName: "Hudson River",
-                datas: [dataEntries[1]._id]
+                sensorId: "SN-VN-02",
+                location: { lat: 10.750082395708914, lng: 106.670648591217 },
+                riverName: "Saigon River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
             },
             {
-                sensorId: "SN-AMZ-03",
-                location: { lat: -3.4653, lng: -62.2159 },
-                riverName: "Amazon River",
-                datas: [dataEntries[2]._id]
+                sensorId: "SN-VN-03",
+                location: { lat: 10.72903454160983, lng: 106.6321926919572 },
+                riverName: "Saigon River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
+            },
+            {
+                sensorId: "SN-VN-04",
+                location: { lat: 10.73594215127016, lng: 106.64409268509549 },
+                riverName: "Saigon River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
+            },
+            {
+                sensorId: "SN-VN-05",
+                location: { lat: 10.884166660501778, lng: 106.72325448727261 },
+                riverName: "Dong Nai River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
+            },
+            {
+                sensorId: "SN-VN-06",
+                location: { lat: 10.853192951424703, lng: 106.68026992686303 },
+                riverName: "Dong Nai River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
+            },
+            {
+                sensorId: "SN-VN-07",
+                location: { lat: 10.813514184866934, lng: 106.77954617021044 },
+                riverName: "Dong Nai River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
+            },
+            {
+                sensorId: "SN-VN-08",
+                location: { lat: 11.144041750072978, lng: 106.50779878338162 },
+                riverName: "Vam Co River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
+            },
+            {
+                sensorId: "SN-VN-09",
+                location: { lat: 10.734233609546372, lng: 106.69429125366091 },
+                riverName: "Saigon River",
+                datas: [dataEntries[Math.floor(Math.random() * 3)]._id]
             }
         ]);
 
         // 4. Create Quests (Linking to the Sensors)
-        await Mission.insertMany([
+        const missionTemplates = [
             {
-                missionId: "Q-001",
-                sensor: sensors[0]._id, // Link to Mississippi Sensor
-                title: "River Clarity Inspection",
-                description: "Perform a visual check of the water clarity near the Mississippi delta.",
+                title: "Routine Water Check",
+                description: "Perform a routine water quality inspection.",
                 amount: 50,
-                severity: "low",
-                status: "active",
-                expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
+                severity: "low"
             },
             {
-                missionId: "Q-002",
-                sensor: sensors[1]._id, // Link to Hudson Sensor
                 title: "TDS Spike Investigation",
-                description: "A sudden rise in TDS was detected. Collect a manual sample for lab testing.",
+                description: "Investigate elevated TDS levels.",
                 amount: 250,
-                severity: "medium",
-                status: "active",
-                expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+                severity: "medium"
             },
             {
-                missionId: "Q-003",
-                sensor: sensors[2]._id, // Link to Amazon Sensor
                 title: "Emergency Toxicity Scan",
-                description: "Critical pollution levels detected. Deploy emergency bio-filters immediately.",
+                description: "Critical pollution detected. Immediate action required.",
                 amount: 1000,
-                severity: "high",
-                status: "active",
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+                severity: "high"
             }
-        ]);
+        ];
+
+        const missions = [];
+
+        sensors.forEach((sensor, sensorIndex) => {
+            // Each sensor gets 1–3 missions
+            const missionCount = Math.floor(Math.random() * 3) + 1;
+
+            for (let i = 0; i < missionCount; i++) {
+                const template = missionTemplates[i % missionTemplates.length];
+
+                missions.push({
+                    missionId: `Q-${sensorIndex + 1}-${i + 1}`,
+                    sensor: sensor._id,
+                    title: template.title,
+                    description: template.description,
+                    amount: template.amount,
+                    severity: template.severity,
+                    status: "active",
+                    expiresAt: new Date(Date.now() + (i + 1) * 24 * 60 * 60 * 1000)
+                });
+            }
+        });
+
+        await Mission.insertMany(missions);
 
         console.log("Successfully seeded Data, Sensors, and Quests!");
         process.exit();
