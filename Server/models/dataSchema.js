@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const dataSchema = new mongoose.Schema({
     dataId: {
@@ -20,11 +20,5 @@ const dataSchema = new mongoose.Schema({
         default: Date.now
     },
 
-    // status: {
-    //     type: String,
-    //     enum: ["good", "warning", "danger"],
-    //     required: true
-    // },
 });
-
-module.exports = mongoose.model("Data", dataSchema);
+export default mongoose.model("Data", dataSchema);

@@ -1,11 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+
 import {ethers} from "ethers";
 import cors from "cors";
 import {provider, adminWallet} from './utils/blockchain.js';
 import rewardRoutes from './controllers/MissionController.js';
-import userRoutes from './routes/UserRouting.js';
+import userRoutes from './routes/userRoutes.js';
+import sensorRoutes from './routes/sensorRoutes.js';
+import missionRoutes from './routes/missionRoutes.js';
 import langchainController from './controllers/AIController.js';
 import {connectDB} from './utils/databaseConnection.js';
 
@@ -14,14 +17,21 @@ connectDB(MONGO_URI);
 
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true
+  })
+);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // 2. Use the route
-// This means every route in MissionController.js will now start with /api
 app.use('/api/missions', rewardRoutes);
 app.use('/api/ai', langchainController);
 app.use("/api/users", userRoutes);
+app.use("/api/sensors", sensorRoutes);
+app.use("/api/missions", missionRoutes);
 
 // Existing block number route...
 app.get('/api/block', async (req, res) => {
