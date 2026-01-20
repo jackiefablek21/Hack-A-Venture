@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../models/userSchema.js";
 import Mission from "../models/missionSchema.js";
+import Data from "../models/DataSchema.js";
 
 import { requireAuth, requireRole } from "../middlewares/auth.js";
 
@@ -9,11 +10,19 @@ const router = express.Router();
 // Get single mission detail
 
 router.get("/:id", async (req, res) => {
-  const mission = await Mission.findById(req.params.id).populate("sensor");
+    const mission = await Mission.findById(req.params.id)
+        .populate({
+            path: 'sensor',
+            populate: {
+                path: 'datas'
+            }
+        });
 
   if (!mission) {
     return res.status(404).json({ message: "Mission not found" });
   }
+
+
 
   res.json(mission);
 });
@@ -23,7 +32,14 @@ router.get("/sensor/:sensorId", async (req, res) => {
   try {
     const missions = await Mission.find({
       sensor: req.params.sensorId
+    }).populate({
+        path: 'sensor',
+        populate: {
+            path: 'datas'
+        }
     });
+
+    console.log(missions.toString());
 
     res.json(missions);
   } catch (err) {

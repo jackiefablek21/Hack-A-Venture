@@ -42,7 +42,7 @@ export default function HomePage() {
           <div className='hero-badge'>DO: <br /> {valueDO} </div>
           <div className='hero-badge'>TDS: <br /> {valueTDS} </div>
         </div>
-        <Link className="hero-button" to={"/"}>View water data</Link>
+        <Link className="hero-button" to={"/govfac"}>View water data</Link>
       </div>
       </div>
 

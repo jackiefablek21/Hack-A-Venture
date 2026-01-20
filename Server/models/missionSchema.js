@@ -16,6 +16,17 @@ const missionSchema = new mongoose.Schema({
         ref: 'Sensor'
     },
 
+    participants: {
+        type: [Schema.Types.ObjectId],
+        index: true,
+        ref: 'User'
+    },
+
+    participantsList: {
+        type: Number,
+        default: 10
+    },
+
     title: {
         type: String,
         required: true

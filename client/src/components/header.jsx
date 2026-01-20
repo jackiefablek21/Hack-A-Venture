@@ -43,8 +43,8 @@ const Header = () => {
         <NavLink to="/login" className="nav-link">
           Login
         </NavLink>
-        
-        {user? `${user.email} || ${user.role}`:'no'}
+
+        {user? `${user.email} ${user.role}`:'no'}
         <button onClick={() => logout()}>logout</button>
       </div>
 
