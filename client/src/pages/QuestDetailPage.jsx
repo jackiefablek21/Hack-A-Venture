@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
+import "../styles/questDetail.css"
 
 export default function QuestDetailPage() {
   const { id } = useParams();
@@ -12,9 +13,6 @@ export default function QuestDetailPage() {
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState("");
 
-  // ======================
-  // Fetch quest detail
-  // ======================
   useEffect(() => {
     async function fetchQuest() {
       try {
@@ -40,9 +38,6 @@ export default function QuestDetailPage() {
   const isFull = participantCount >= quest.participantLimit;
   const alreadyJoined = quest.participants?.includes(user?._id);
 
-  // ======================
-  // Join campaign
-  // ======================
   const handleJoin = async () => {
     try {
       setJoining(true);
@@ -80,63 +75,73 @@ export default function QuestDetailPage() {
   };
 
   return (
-    <main className="page">
-      <button onClick={() => navigate(-1)}>← Back</button>
+    <main className="quest-detail-wrapper">
+      <div className="quest-detail-container">
+        <button onClick={() => navigate(-1)} className="back-button">← Back</button>
 
-      <h1>{quest.title}</h1>
-      <p>{quest.description}</p>
+        <h1>{quest.title}</h1>
+        <p>{quest.description}</p>
 
-      <hr />
+        <hr />
 
-      <h3>Campaign Info</h3>
-      <ul>
-        <li><strong>Reward:</strong> 💰 {quest.amount}</li>
-        <li><strong>Severity:</strong> {quest.severity}</li>
-        <li><strong>Status:</strong> {quest.status}</li>
-        <li>
-          <strong>Expires:</strong>{" "}
-          {quest.expiresAt
-            ? new Date(quest.expiresAt).toLocaleString()
-            : "No expiry"}
-        </li>
-      </ul>
+        <h3>Campaign Info</h3>
+        <ul>
+          <li><strong>Reward:</strong> 💰 {quest.amount}</li>
+          <li><strong>Severity:</strong> {quest.severity}</li>
+          <li><strong>Status:</strong> {quest.status}</li>
+          <li>
+            <strong>Expires:</strong>{" "}
+            {quest.expiresAt
+              ? new Date(quest.expiresAt).toLocaleString()
+              : "No expiry"}
+          </li>
+        </ul>
 
-      <h3>Participation</h3>
-      <p>
-        Participants: {participantCount} / {quest.participantLimit}
-      </p>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* ======================
-          JOIN BUTTON LOGIC
-      ====================== */}
-      {user?.role === "user" && (
-        <>
-          {alreadyJoined ? (
-            <p style={{ color: "green" }}>
-              You have joined this campaign.
-            </p>
-          ) : (
-            <button
-              onClick={handleJoin}
-              disabled={joining || isFull}
-            >
-              {isFull
-                ? "Campaign Full"
-                : joining
-                ? "Joining..."
-                : "Join Campaign"}
-            </button>
-          )}
-        </>
-      )}
-
-      {!user && (
-        <p style={{ color: "gray" }}>
-          Please log in to join this campaign.
+        <h3>Participation</h3>
+        <p>
+          Participants: {participantCount} / {quest.participantLimit}
         </p>
-      )}
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
+        {/* ======================
+            JOIN BUTTON LOGIC
+        ====================== */}
+        {user?.role === "user" && (
+          <>
+            {alreadyJoined ? (
+              <p style={{ color: "green" }}>
+                You have joined this campaign.
+              </p>
+            ) : (
+              <button
+                onClick={handleJoin}
+                disabled={joining || isFull}
+                className="join-button"
+              >
+                {isFull
+                  ? "Campaign Full"
+                  : joining
+                  ? "Joining..."
+                  : "Join Campaign"}
+              </button>
+            )}
+          </>
+        )}
+
+        {!user && (
+          <p style={{ color: "gray" }}>
+            Please log in to join this campaign.
+          </p>
+        )}
+        <button
+          className="claim-button"
+          onClick={(e) => {
+            e.target.value = "Claimed"
+          }}
+        >Claim reward</button>
+        </div>
+        
     </main>
   );
 }
