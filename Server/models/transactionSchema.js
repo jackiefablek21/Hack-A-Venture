@@ -37,3 +37,4 @@ const transactionSchema = new mongoose.Schema(
   },
   { _id: false }
 );
+export default mongoose.model("Transaction", transactionSchema);
