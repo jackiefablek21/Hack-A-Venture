@@ -1,24 +1,45 @@
 /* --- Dashboard / Government Page Styles --- */
 
 
-.gov-app-wrapper{
-    padding: 6rem 3rem;
+.gov-app-wrapper {
+  position: relative; /* ⭐ THIS LINE FIXES EVERYTHING */
+  padding: 6rem 3rem;
+  background-image: url("/assets/hero.png");
+  background-size: cover;
+  background-position: center;
 }
 
+.gov-app-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.gov-app-container {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  border-radius: 2rem;
+  gap: 2rem;
+}
 
 .dashboard-nav {
-  background-color: var(--white);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .nav-title {
   color: var(--primary-color);
   font-size: 1.5rem;
   font-weight: bold;
+  background-color: var(--white);
+  padding: 1rem 3rem;
+  border-radius: 1rem;
 }
 
 .badge {
@@ -231,3 +252,7 @@
 }
 .anomaly-severity.critical { color: var(--danger-color); }
 .anomaly-severity.warning { color: #f39c12; }
+
+/* .header-wrapper {
+  background-color: var(--primary-color);
+} */

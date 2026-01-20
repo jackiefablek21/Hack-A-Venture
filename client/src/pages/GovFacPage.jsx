@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/govfacpage.css";
 import {
   LineChart,
@@ -8,140 +8,220 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 
-// Mock Data for Charts and Tables (Time Series)
-const historicalData = [
-  { time: "08:00", ph: 7.1, turbidity: 3.5, do: 6.5, status: "Normal" },
-  { time: "09:00", ph: 7.2, turbidity: 3.6, do: 6.4, status: "Normal" },
-  { time: "10:00", ph: 7.1, turbidity: 3.8, do: 6.2, status: "Normal" },
-  { time: "11:00", ph: 6.9, turbidity: 4.2, do: 5.8, status: "Warning" },
-  { time: "12:00", ph: 6.5, turbidity: 5.5, do: 4.5, status: "Critical" }, // Anomaly
-  { time: "13:00", ph: 6.8, turbidity: 4.8, do: 5.5, status: "Warning" },
-  { time: "14:00", ph: 7.2, turbidity: 3.8, do: 6.7, status: "Normal" },
-];
-
-const anomalyHistory = [
-  { id: 1, time: "2026-01-12 12:00", type: "Low pH / High Turbidity", location: "Factory Outlet A", severity: "Critical" },
-  { id: 2, time: "2026-01-10 04:30", type: "Low Dissolved Oxygen", location: "River Node 11", severity: "Warning" },
-];
-
 export default function GovernmentPage() {
-  const [activeTab, setActiveTab] = useState("charts"); // charts, table, report
+  const [sensorData, setSensorData] = useState([]);
+  const [activeTab, setActiveTab] = useState("charts");
+
+  /* =========================
+     FETCH SENSOR DATA
+     ========================= */
+  useEffect(() => {
+    const fetchSensors = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/api/sensors");
+        const data = await res.json();
+        setSensorData(data);
+        console.log("Sensors:", data);
+      } catch (err) {
+        console.error("Failed to load sensor data", err);
+      }
+    };
+
+    fetchSensors();
+  }, []);
+
+  useEffect(() => {
+  if (sensorData.length > 0) {
+    console.log("FIRST SENSOR:", sensorData[0]);
+    console.log("FIRST SENSOR DATAS:", sensorData[0].datas);
+    console.log("FIRST DATA ENTRY:", sensorData[0].datas?.[0]);
+  }
+}, [sensorData]);
+
+  /* =========================
+     ADAPTER: SENSOR → UI DATA
+     (TDS ONLY)
+     ========================= */
+    const adaptedHistoricalData = sensorData.flatMap((sensor) => {
+  if (!Array.isArray(sensor.datas)) return [];
+
+  return sensor.datas.map((d) => {
+    const tds = d.metrics?.tds;
+
+    if (typeof tds !== "number") {
+      console.warn("Invalid TDS reading:", d);
+      return null;
+    }
+
+    return {
+      time: new Date(d.recordTime || sensor.lastUpdated).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      tds,
+      status:
+        tds > 500
+          ? "Critical"
+          : tds > 300
+          ? "Warning"
+          : "Normal",
+    };
+  });
+  }).filter(Boolean);
+
+  const avgTDS =
+    adaptedHistoricalData.reduce((sum, d) => sum + d.tds, 0) /
+      adaptedHistoricalData.length || 0;
+
+  const activeAnomalies = adaptedHistoricalData.filter(
+    (d) => d.status !== "Normal"
+  );
 
   const handleExport = (format) => {
-    // Logic to trigger AI report generation would go here
     alert(`Generating AI-based ${format} report...`);
   };
 
+  if (!adaptedHistoricalData.length) {
+    return <p style={{ padding: "2rem" }}>No sensor data available.</p>;
+  }
+
+  
+
   return (
-    <div className='gov-app-wrapper'>
-      {/* Navigation / Header - Keeping consistency with Home */}
-      <nav className="dashboard-nav">
-        <h1 className='nav-title'>HydraLink <span className="badge">Gov/Factory Portal</span></h1>
+    <div className="gov-app-wrapper">
+      {/* HEADER */}
+      <div className="gov-app-container">
+        <nav className="dashboard-nav">
+        <h1 className="nav-title">
+          HydraLink <span className="badge">Gov / Factory Portal</span>
+        </h1>
       </nav>
 
-      {/* Main Dashboard Content */}
       <div className="dashboard-container">
-        
-        {/* KPI Cards */}
+        {/* KPI CARDS */}
         <div className="kpi-grid">
           <div className="kpi-card">
-            <h3>Avg pH (24h)</h3>
-            <div className="value">7.1</div>
-            <span className="status normal">Normal</span>
+            <h3>Avg TDS</h3>
+            <div className="value">{avgTDS.toFixed(0)} ppm</div>
+            <span
+              className={`status ${
+                avgTDS > 500
+                  ? "critical"
+                  : avgTDS > 300
+                  ? "warning"
+                  : "normal"
+              }`}
+            >
+              {avgTDS > 500
+                ? "Critical"
+                : avgTDS > 300
+                ? "Elevated"
+                : "Normal"}
+            </span>
           </div>
-          <div className="kpi-card">
-            <h3>Avg Turbidity</h3>
-            <div className="value">4.1 NTU</div>
-            <span className="status warning">Elevated</span>
-          </div>
-          <div className="kpi-card">
-            <h3>Avg D.O.</h3>
-            <div className="value">6.1 mg/L</div>
-            <span className="status normal">Healthy</span>
-          </div>
+
           <div className="kpi-card">
             <h3>Active Anomalies</h3>
-            <div className="value danger">1</div>
+            <div className="value danger">{activeAnomalies.length}</div>
             <span className="status critical">Requires Action</span>
           </div>
         </div>
 
-        {/* Action Bar */}
+        {/* ACTION BAR */}
         <div className="action-bar">
           <div className="tabs">
-            <button className={`tab-btn ${activeTab === 'charts' ? 'active' : ''}`} onClick={() => setActiveTab('charts')}>Analytics</button>
-            <button className={`tab-btn ${activeTab === 'table' ? 'active' : ''}`} onClick={() => setActiveTab('table')}>Raw Data</button>
+            <button
+              className={`tab-btn ${
+                activeTab === "charts" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("charts")}
+            >
+              Analytics
+            </button>
+            <button
+              className={`tab-btn ${
+                activeTab === "table" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("table")}
+            >
+              Raw Data
+            </button>
           </div>
+
           <div className="export-controls">
             <span>Export AI Report:</span>
-            <button className="btn-outline" onClick={() => handleExport('CSV')}>CSV</button>
-            <button className="btn-primary" onClick={() => handleExport('PDF')}>PDF Analysis</button>
+            <button
+              className="btn-outline"
+              onClick={() => handleExport("CSV")}
+            >
+              CSV
+            </button>
+            <button
+              className="btn-primary"
+              onClick={() => handleExport("PDF")}
+            >
+              PDF Analysis
+            </button>
           </div>
         </div>
 
-        {/* Content Area */}
+        {/* CONTENT */}
         <div className="content-panel">
-          
-          {/* CHARTS SECTION */}
-          {activeTab === 'charts' && (
+          {/* CHART */}
+          {activeTab === "charts" && (
             <div className="charts-wrapper">
               <div className="chart-container">
-                <h3 className="section-title-small">Water Quality Trends (pH & DO)</h3>
+                <h3 className="section-title-small">
+                  Total Dissolved Solids (TDS)
+                </h3>
                 <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={historicalData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                  <LineChart data={adaptedHistoricalData}>
+                    <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="time" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="ph" stroke="var(--primary-color)" strokeWidth={2} activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="do" stroke="var(--success-color)" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="chart-container">
-                <h3 className="section-title-small">Turbidity Levels</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={historicalData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                    <XAxis dataKey="time" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="turbidity" stroke="var(--danger-color)" strokeWidth={2} />
+                    <Line
+                      type="monotone"
+                      dataKey="tds"
+                      stroke="var(--danger-color)"
+                      strokeWidth={2}
+                      name="TDS (ppm)"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
             </div>
           )}
 
-          {/* TABLE SECTION */}
-          {activeTab === 'table' && (
+          {/* TABLE */}
+          {activeTab === "table" && (
             <div className="table-wrapper">
-              <h3 className="section-title-small">Detailed Sensor Logs</h3>
+              <h3 className="section-title-small">
+                Detailed Sensor Logs (TDS)
+              </h3>
               <table className="data-table">
                 <thead>
                   <tr>
                     <th>Time</th>
-                    <th>pH</th>
-                    <th>Turbidity</th>
-                    <th>DO</th>
+                    <th>TDS (ppm)</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {historicalData.map((row, index) => (
+                  {adaptedHistoricalData.map((row, index) => (
                     <tr key={index}>
                       <td>{row.time}</td>
-                      <td>{row.ph}</td>
-                      <td>{row.turbidity}</td>
-                      <td>{row.do}</td>
+                      <td>{row.tds}</td>
                       <td>
-                        <span className={`status-badge ${row.status.toLowerCase()}`}>{row.status}</span>
+                        <span
+                          className={`status-badge ${row.status.toLowerCase()}`}
+                        >
+                          {row.status}
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -151,26 +231,29 @@ export default function GovernmentPage() {
           )}
         </div>
 
-        {/* ANOMALY HISTORY (Always Visible) */}
+        {/* ANOMALY HISTORY */}
         <section className="anomaly-section">
-          <h1 className="section-title" style={{textAlign: 'left', fontSize: '1.5rem'}}>Anomaly History</h1>
+          <h1 className="section-title">Anomaly History</h1>
           <div className="anomaly-list">
-            {anomalyHistory.map((anomaly) => (
-              <div key={anomaly.id} className="anomaly-item">
+            {activeAnomalies.map((a, i) => (
+              <div key={i} className="anomaly-item">
                 <div className="anomaly-icon">!</div>
                 <div className="anomaly-info">
-                  <h4>{anomaly.type}</h4>
-                  <p>{anomaly.location} • {anomaly.time}</p>
+                  <h4>High TDS Level</h4>
+                  <p>{a.time}</p>
                 </div>
-                <div className={`anomaly-severity ${anomaly.severity.toLowerCase()}`}>
-                  {anomaly.severity}
+                <div
+                  className={`anomaly-severity ${a.status.toLowerCase()}`}
+                >
+                  {a.status}
                 </div>
               </div>
             ))}
           </div>
         </section>
-
       </div>
+      </div>
+      
     </div>
   );
 }

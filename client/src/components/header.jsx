@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
+import { Pointer } from "lucide-react";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -11,55 +12,41 @@ const Header = () => {
     <header className="header-wrapper">
       <div className="header-left">
         <NavLink
-          to="/map"
+          to="/"
           end
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
+          className={({ isActive }) => isActive ? "nav-link active  hover-lift" : "nav-link  hover-lift"}
         >
           Map
         </NavLink>
-      </div>
-
-      <div className="header-right">
         <NavLink
-          to="/"
+          to="/about"
           end
           className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
+            isActive ? "nav-link active hover-lift" : "nav-link hover-lift"
           }
         >
-          Home
-        </NavLink>
-
-        <NavLink to="/about" className="nav-link">
           About us
         </NavLink>
-
-        <NavLink to="/contact" className="nav-link">
-          Contact
-        </NavLink>
-        
       </div>
       <div className="header-user">
+        {user?.role === "admin" && (
+          <h1 style={{ pointerEvents: "none" }}>Admin mode</h1>
+        )}
+
+        {user?.role === "gov" && <button className="hover-lift" style={{color:"var(--white)",fontSize:"2rem", border:"2px solid white", background:"none", cursor:"pointer", padding:"0.5rem 2rem"}}>Gov panel</button>}
         {user ? (
           <div className="user-menu">
-            <div
-              className="profile-img-wrapper"
-              onClick={() => setOpen(!open)}
-            >
+            <div className="profile-img-wrapper" onClick={() => setOpen(!open)}>
               <img
-                className="profile-img"
-                src='../../public/assets/userDefault.png'
+                className="profile-img hover-lift"
+                src="../../public/assets/userDefault.png"
                 alt="User avatar"
               />
             </div>
 
             {open && (
               <div className="dropdown-menu">
-                <button onClick={() => navigate("/user")}>
-                  Profile
-                </button>
+                <button onClick={() => navigate("/user")}>Profile</button>
 
                 <button
                   onClick={() => {
@@ -74,13 +61,12 @@ const Header = () => {
             )}
           </div>
         ) : (
-          <NavLink to="/login" className="nav-link">
+          <NavLink to="/login" className="nav-link hover-lift">
             Login
           </NavLink>
         )}
       </div>
-
-    </header> 
+    </header>
   );
 };
 

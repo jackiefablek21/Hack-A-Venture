@@ -1,8 +1,7 @@
 import { useState } from "react";
-import "../styles/login.css"
+import "../styles/login.css";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -13,7 +12,7 @@ export default function LoginPage() {
   });
 
   let navigate = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,6 +36,7 @@ export default function LoginPage() {
 
       console.log("Logged in user:", data);
       alert("Login successful!");
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
@@ -56,9 +56,7 @@ export default function LoginPage() {
               id="login-email"
               placeholder="Email"
               value={form.email}
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
           </div>
 
@@ -74,9 +72,20 @@ export default function LoginPage() {
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
           </div>
-          
-          <span>Don't have an account? <button className="register-nav-button" onClick={() => {navigate("/register")}} >Create one!!</button></span>
-          <button type="submit" className="login-button">Login</button>
+
+          <span>
+            Don't have an account?{" "}
+            <button
+              type="button"
+              className="register-nav-button hover-lift"
+              onClick={() => navigate("/register")}
+            >
+              Create one!!
+            </button>
+          </span>
+          <button type="submit" className="login-button hover-lift">
+            Login
+          </button>
         </form>
       </div>
     </main>

@@ -1,7 +1,8 @@
 .quest-detail-wrapper {
   position: relative;
   padding: 6rem 3rem;
-  background-image: url("../../public/assets/hero/hero1.png");
+  background-image: url("/assets/hero.png");
+
   background-size: cover;
   background-position: center;
   display: flex;
@@ -31,19 +32,21 @@
   align-items: center;
   gap: 2rem;
   box-shadow: -5px -5px 50px 0 rgba(0, 0, 0, 0.25);
-
 }
 
-.back-button,.join-button,.claim-button {
-    padding: 0.75rem 3rem;
-    color: var(--primary-color);
-    font-size: 1.5rem;
+.back-button,
+.join-button,
+.claim-button {
+  padding: 0.75rem 3rem;
+  color: var(--primary-color);
+  font-size: 1.5rem;
 }
 
 .claim-button {
-    color: var(--success-color);
+  color: var(--success-color);
 }
 
-.quest-detail-container li, p {
-    font-size: 1.25rem;
+.quest-detail-container li,
+p {
+  font-size: 1.25rem;
 }

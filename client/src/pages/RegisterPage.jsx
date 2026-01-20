@@ -73,8 +73,8 @@ export default function RegisterPage() {
             />
           </div>
 
-          <span>Already have an account? <button className="login-nav-button" onClick={() => {navigate("/login")}} >Login!!</button></span>
-          <button type="submit" className="register-button">
+          <span>Already have an account? <button className="login-nav-button hover-lift" onClick={() => {navigate("/login")}} >Login!!</button></span>
+          <button type="submit" className="register-button hover-lift">
             Register
           </button>
         </form>

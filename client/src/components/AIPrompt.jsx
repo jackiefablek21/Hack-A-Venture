@@ -58,9 +58,18 @@ const ChatComponent = () => {
             setIsLoading(false);
         }
     };
+    const chatStyle = {
+        backgroundColor: "white",
+        padding:"2rem",
+        display:"flex",
+        flexDirection:"column",
+        justifyContents:"center",    
+        borderRadius:"1rem",
+        marginTop:"1rem",
+    }
 
     return (
-        <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto border rounded-lg bg-gray-50 shadow-sm">
+        <div style={chatStyle} className="flex flex-col h-[600px] w-full max-w-2xl mx-auto border rounded-lg bg-gray-50 shadow-sm">
             {/* Header */}
             <div className="p-4 border-b bg-white rounded-t-lg">
                 <h2 className="font-semibold flex items-center gap-2">
@@ -95,10 +104,11 @@ const ChatComponent = () => {
             </div>
 
             {/* Input Area */}
-            <form onSubmit={sendMessage} className="p-4 border-t bg-white rounded-b-lg flex gap-2">
+            <form onSubmit={sendMessage} className="p-4 border-t bg-white rounded-b-lg flex gap-2" style={{ display:'flex', alignItems:"center"}}>
                 <input
                     type="text"
                     value={input}
+                    style={{padding:"0.5rem 0.5rem", fontSize:"1.5rem"}}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask something..."
                     className="flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -109,7 +119,7 @@ const ChatComponent = () => {
                     disabled={isLoading}
                     className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors"
                 >
-                    <Send size={20} />
+                    <Send size={32} style={{margin:"0.25rem"}} />
                 </button>
             </form>
         </div>

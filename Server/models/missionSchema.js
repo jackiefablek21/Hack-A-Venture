@@ -3,17 +3,22 @@ const { Schema } = mongoose;
 
 
 const missionSchema = new mongoose.Schema({
-    missionId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-
     sensor: {
         type: Schema.Types.ObjectId,
         required: true,
         index: true,
         ref: 'Sensor'
+    },
+
+    participants: {
+        type: [Schema.Types.ObjectId],
+        index: true,
+        ref: 'User'
+    },
+
+    participantsList: {
+        type: Number,
+        default: 10
     },
 
     title: {
@@ -53,4 +58,6 @@ const missionSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model("Mission", missionSchema);
+const Mission = mongoose.models.Mission || mongoose.model('Mission', missionSchema);
+
+export default Mission;

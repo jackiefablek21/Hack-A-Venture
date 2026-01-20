@@ -1,15 +1,17 @@
 import Header from "./components/header"
 import Footer from "./components/footer"
 import { Route, Routes } from "react-router"
-import HomePage from "./pages/HomePage"
+
 import MapPage from "./pages/MapPage"
+import AboutPage from "./pages/AboutPage"
+
 import RegisterPage from "./pages/RegisterPage"
 import LoginPage from "./pages/LoginPage"
 import GovFacPage from "./pages/GovFacPage"
 import QuestDetailPage from "./pages/QuestDetailPage"
+import UserProfilePage from "./pages/UserProfilePage"
 
 import "./styles/App.css";
-import UserProfilePage from "./pages/userProfilePage"
 function App() {
   return (
     <>
@@ -17,9 +19,9 @@ function App() {
 
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/map" element={<MapPage />} />
-        <Route path="/govfac" element={<GovFacPage />}></Route>
+        <Route path="/" element={<MapPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/govfac" element={<GovFacPage />} />
         
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

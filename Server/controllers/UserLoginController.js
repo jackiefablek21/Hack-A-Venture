@@ -13,12 +13,22 @@ router.get("/", async (req, res) => {
 
 // create user 
 router.post("/register", async (req, res) => {
-  try  {
+  try {
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
         message: "Email and password are required",
+      });
+    }
+
+    const existingUser = await User.findOne({
+      email: email.toLowerCase(),
+    });
+
+    if (existingUser) {
+      return res.status(409).json({
+        message: "Email already registered",
       });
     }
 
@@ -29,7 +39,7 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "User registered successfully",
       user: {
         id: user._id,
@@ -37,9 +47,11 @@ router.post("/register", async (req, res) => {
         createdAt: user.createdAt,
       },
     });
-
-  } catch(err) {
-    res.status(400).json({ message: err.message });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Server error during registration",
+    });
   }
 });
 

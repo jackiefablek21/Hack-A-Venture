@@ -17,11 +17,23 @@ const seedDB = async () => {
         await Mission.deleteMany({});
 
         // 2. Create the Data entries (Historical readings)
-        const dataEntries = await Data.insertMany([
-            { metrics: { tds: Math.floor(Math.random() * 1000) }, status: "good", recordTime: new Date() },
-            { metrics: { tds: Math.floor(Math.random() * 1000) }, status: "warning", recordTime: new Date() },
-            { metrics: { tds: Math.floor(Math.random() * 1000) }, status: "danger", recordTime: new Date() }
-        ]);
+       const DATA_VARIANTS = 10; // ← change this number anytime
+
+        const dataPayload = Array.from({ length: DATA_VARIANTS }, () => {
+            const tds = Math.floor(Math.random() * 1000);
+
+            let status = "good";
+            if (tds > 600) status = "danger";
+            else if (tds > 300) status = "warning";
+
+            return {
+                metrics: { tds },
+                status,
+                recordTime: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000) // random last 7 days
+            };
+        });
+
+        const dataEntries = await Data.insertMany(dataPayload);
 
         // 3. Create Sensors (Linking to the data array)
         const sensors = await Sensor.insertMany([
