@@ -1,7 +1,7 @@
 .map-wrapper {
   position: relative;
-  padding: 4rem 3rem;
-  background-image: url("../assets/hero/Image.png");
+  padding: 6rem 3rem;
+  background-image: url("../../public/assets/hero/hero1.png");
   background-size: cover;
   background-position: center;
   display: flex;

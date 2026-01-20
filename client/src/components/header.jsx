@@ -1,9 +1,11 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react";
 
 const Header = () => {
   const { user, logout } = useAuth();
-
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="header-wrapper">
@@ -39,20 +41,43 @@ const Header = () => {
         </NavLink>
         
       </div>
-      <div>
-        {user ? 
-        <div className="profile-img-wrapper">
-          <img src="../assets/userDefault.png"/>
-        </div>
-         : 
-        <NavLink to="/login" className="nav-link">
-          Login
-        </NavLink>
-        }
-        
+      <div className="header-user">
+        {user ? (
+          <div className="user-menu">
+            <div
+              className="profile-img-wrapper"
+              onClick={() => setOpen(!open)}
+            >
+              <img
+                className="profile-img"
+                src='../../public/assets/userDefault.png'
+                alt="User avatar"
+              />
+            </div>
 
-        {user? `${user.email} ${user.role}`:'no'}
-        <button onClick={() => logout()}>logout</button>
+            {open && (
+              <div className="dropdown-menu">
+                <button onClick={() => navigate("/user")}>
+                  Profile
+                </button>
+
+                <button
+                  onClick={() => {
+                    logout();
+                    setOpen(false);
+                    navigate("/");
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <NavLink to="/login" className="nav-link">
+            Login
+          </NavLink>
+        )}
       </div>
 
     </header> 
