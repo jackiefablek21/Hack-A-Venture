@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import contractJson from "./HydraCoin.json";
 
-const contractAddress = "0x6d23d5c2613cf9762416db965e9bb429c2c54699";
+const contractAddress = "0xA9Cae77b860f8F13677780bb6aA5aDC089Ef2bed";
 const abi = contractJson.abi;
 
 const InteractWithContract = () => {
