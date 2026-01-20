@@ -35,26 +35,11 @@ export default function MapPage() {
     const { user } = useAuth();
 
     function getSensorIcon(sensor) {
-        const dataRecords = sensor?.datas;
+        const avg = calculateAvgTds(sensor);
 
-        // 1. Check if datas exists and has entries
-        if (!dataRecords || dataRecords.length === 0) {
-            return greenIcon; // Default icon if no data is available
-        }
-
-        // 2. Sum up all TDS values
-        const totalTds = dataRecords.reduce((sum, record) => {
-            return sum + (record.metrics?.tds || 0);
-        }, 0);
-
-        // 3. Calculate the average
-        const averageTds = totalTds / dataRecords.length;
-
-        // console.log(`Average TDS for ${sensor.name || 'Sensor'}:`, averageTds);
-
-        // 4. Return icon based on average
-        if (averageTds >= 500) return redIcon;
-        if (averageTds >= 200) return yellowIcon;
+        if (avg === 0) return greenIcon; // Default for no data
+        if (avg >= 500) return redIcon;
+        if (avg >= 200) return yellowIcon;
         return greenIcon;
     }
 
@@ -136,6 +121,18 @@ export default function MapPage() {
         fetchSensors();
     }, []);
 
+    // Helper to calculate average TDS
+    function calculateAvgTds(sensor) {
+        const dataRecords = sensor?.datas;
+        if (!dataRecords || dataRecords.length === 0) return 0;
+
+        const totalTds = dataRecords.reduce((sum, record) => {
+            return sum + (record.metrics?.tds || 0);
+        }, 0);
+
+        return (totalTds / dataRecords.length).toFixed(2); // Rounds to 2 decimal places
+    }
+
     return (
         <main className="map-wrapper">
             <div className="map-container">
@@ -194,6 +191,7 @@ export default function MapPage() {
                             <p><strong>River:</strong> {selectedSensor.riverName}</p>
                             <p><strong>Latitude:</strong> {selectedSensor.location.lat}</p>
                             <p><strong>Longitude:</strong> {selectedSensor.location.lng}</p>
+                            <p><strong>Average tds:</strong> {calculateAvgTds(selectedSensor)} </p>
                             <strong>Last Updated:</strong>
                             {new Date(selectedSensor.lastUpdated).toLocaleString()}s
                         </div>

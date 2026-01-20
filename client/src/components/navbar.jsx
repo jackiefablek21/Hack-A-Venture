@@ -44,7 +44,7 @@ const Navbar = () => {
             ) : (
                 <button onClick={connectWallet}>Connect Wallet</button>
             )}
-            <InteractWithContract></InteractWithContract>
+            {/*<InteractWithContract></InteractWithContract>*/}
 
 
             <div className="mission-list">
