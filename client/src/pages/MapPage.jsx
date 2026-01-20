@@ -5,7 +5,7 @@ import vietnamGeoJSON from "../data/vietnam-provinces.json";
 import "../styles/map.css";
 import "leaflet/dist/leaflet.css";
 
-import { greenIcon, yellowIcon, redIcon } from "../data/mapIcons.js";
+import { greenIcon, yellowIcon, redIcon, rmitIcon } from "../data/mapIcons.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 export default function MapPage() {
@@ -171,6 +171,22 @@ export default function MapPage() {
               }}
             />
           ))}
+          <Marker
+            position={[10.729352814744516, 106.6939070383547]}
+            icon={rmitIcon}
+          >
+            <Popup>
+              <div className="rmit-popup">
+                <h4>RMIT South Saigon</h4>
+                <span>lat: 10.729352814744516</span>
+                <span>lng: 106.6939070383547</span>
+                <img
+                  src="/assets/rmit-picture.jpg"
+                  alt="RMIT University Vietnam"
+                />
+              </div>
+            </Popup>
+          </Marker>
         </MapContainer>
       </div>
 
@@ -185,7 +201,9 @@ export default function MapPage() {
                 gap: "1rem",
               }}
             >
-              <h2 style={{color:"var(--primary-color)"}}>Sensor: {selectedSensor.sensorId}</h2>
+              <h2 style={{ color: "var(--primary-color)" }}>
+                Sensor: {selectedSensor.sensorId}
+              </h2>
 
               <button
                 style={{
@@ -230,7 +248,9 @@ export default function MapPage() {
                 {new Date(selectedSensor.lastUpdated).toLocaleString()}
               </p>
             </div>
-            <h2 style={{ padding: "1rem 0rem" ,color:"var(--primary-color)"}}>Missions</h2>
+            <h2 style={{ padding: "1rem 0rem", color: "var(--primary-color)" }}>
+              Missions
+            </h2>
             <hr></hr>
 
             {missions.length === 0 && (
@@ -296,22 +316,28 @@ export default function MapPage() {
                 className="sensor-panel"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-                    <h2>Create Campaign</h2>
-                     <button
-                        style={{
-                        padding: "0.5rem",
-                        fontSize: "1.5rem",
-                        margin: "0.5rem 0rem",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        }}
-                        className="close-btn hover-lift"
-                        onClick={() => setShowCreateCampaign(false)}
-                    >
-                        X
-                    </button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <h2>Create Campaign</h2>
+                  <button
+                    style={{
+                      padding: "0.5rem",
+                      fontSize: "1.5rem",
+                      margin: "0.5rem 0rem",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                    className="close-btn hover-lift"
+                    onClick={() => setShowCreateCampaign(false)}
+                  >
+                    X
+                  </button>
                 </div>
 
                 <form
@@ -404,12 +430,23 @@ export default function MapPage() {
 
                   <label>
                     Expiration Date
-                    <input name="expiresAt" type="date"  className="create-select" />
+                    <input
+                      name="expiresAt"
+                      type="date"
+                      className="create-select"
+                    />
                   </label>
 
-                  <button  style={{cursor:"pointer"}} type="submit" className="create-button hover-lift">Create</button>
-                  <button style={{cursor:"pointer"}} 
-                  className="generate-button hover-lift"
+                  <button
+                    style={{ cursor: "pointer" }}
+                    type="submit"
+                    className="create-button hover-lift"
+                  >
+                    Create
+                  </button>
+                  <button
+                    style={{ cursor: "pointer" }}
+                    className="generate-button hover-lift"
                     type="button"
                     onClick={handleGenerateQuests}
                     disabled={loading}

@@ -88,7 +88,7 @@
 .section-wrapper {
   background-color: var(--white);
   width: 100%;
-  min-height: 400px;
+  min-height: 350px;
   border-radius: 30px;
   box-shadow: -5px -5px 50px 0 rgba(0, 0, 0, 0.25);
 }
@@ -126,16 +126,6 @@
   font-size: 2rem;
 }
 
-.create-input {
-  padding: 0.75rem;
-  color: var(--primary-color);
-}
-
-.create-select{
-  color: var(--primary-color);
-  padding: 0.75rem;
-  
-}
 
 @media (max-width: 768px) {
   .hero-data {

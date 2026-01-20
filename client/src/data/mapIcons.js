@@ -7,6 +7,13 @@ const baseIcon = {
   shadowSize: [41, 41],
 };
 
+export const rmitIcon = L.icon({
+  iconUrl: "/assets/rmit-logo.jpg",
+  iconSize: [60, 40],
+  iconAnchor: [24, 24],
+  popupAnchor: [0, -24],
+});
+
 export const greenIcon = new L.Icon({
   ...baseIcon,
   iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
