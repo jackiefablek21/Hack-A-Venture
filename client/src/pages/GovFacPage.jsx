@@ -45,32 +45,36 @@ export default function GovernmentPage() {
      ADAPTER: SENSOR → UI DATA
      (TDS ONLY)
      ========================= */
-    const adaptedHistoricalData = sensorData.flatMap((sensor) => {
-  if (!Array.isArray(sensor.datas)) return [];
+    const adaptedHistoricalData = sensorData
+  .flatMap((sensor) => {
+    if (!Array.isArray(sensor.datas)) return [];
 
-  return sensor.datas.map((d) => {
-    const tds = d.metrics?.tds;
+    return sensor.datas.map((d) => {
+      const tds = d.metrics?.tds;
+      const date = new Date(d.recordTime || sensor.lastUpdated);
 
-    if (typeof tds !== "number") {
-      console.warn("Invalid TDS reading:", d);
-      return null;
-    }
+      if (typeof tds !== "number" || isNaN(date)) return null;
 
-    return {
-      time: new Date(d.recordTime || sensor.lastUpdated).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      tds,
-      status:
-        tds > 500
-          ? "Critical"
-          : tds > 300
-          ? "Warning"
-          : "Normal",
-    };
-  });
-  }).filter(Boolean);
+      return {
+        timestamp: date.getTime(), // 🔑 for sorting
+        time: date.toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Asia/Ho_Chi_Minh",
+        }),
+        tds,
+        status:
+          tds > 500
+            ? "Critical"
+            : tds > 300
+            ? "Warning"
+            : "Normal",
+      };
+    });
+  })
+  .filter(Boolean)
+  .sort((a, b) => a.timestamp - b.timestamp); // 🔑 FIXES ORDER
+
 
   const avgTDS =
     adaptedHistoricalData.reduce((sum, d) => sum + d.tds, 0) /

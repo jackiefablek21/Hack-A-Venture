@@ -33,7 +33,10 @@ const Header = () => {
           <h1 style={{ pointerEvents: "none" }}>Admin mode</h1>
         )}
 
-        {user?.role === "gov" && <button className="hover-lift" style={{color:"var(--white)",fontSize:"2rem", border:"2px solid white", background:"none", cursor:"pointer", padding:"0.5rem 2rem"}}>Gov panel</button>}
+        {user?.role === "gov" && <button 
+        className="hover-lift" 
+        style={{color:"var(--white)",fontSize:"2rem", border:"2px solid white", background:"none", cursor:"pointer", padding:"0.5rem 2rem"}} 
+        onClick={() => {navigate('/govfac')}}>Gov panel</button>}
         {user ? (
           <div className="user-menu">
             <div className="profile-img-wrapper" onClick={() => setOpen(!open)}>
